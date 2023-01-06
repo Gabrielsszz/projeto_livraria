@@ -13,37 +13,61 @@ struct livro {
 };
 typedef struct livro Livro;
 
-struct lista_ISBN {
-  char info;
-  struct lista_ISBN *prox;
-};
-
-typedef struct lista_ISBN Lista_ISBN;
-
-Lista_ISBN *incializa1(void) { return NULL; }
-
-Lista_ISBN inserir_IBSN(Lista_ISBN *l, char ISBN) {
-  Lista_ISBN *novo = (Lista_ISBN *)malloc(sizeof(Lista_ISBN));
-  novo->info = ISBN;
-  novo->prox = l;
-  return *novo;
-}
-
-Lista_ISBN *busca(Lista_ISBN *l, char v) {
-  Lista_ISBN *p;
-  for (p = l; p != NULL; p = p->prox) {
-    if (p->info == v) {
-      return p;
-    }
-  }
-  return NULL;
-}
-
 struct lista_livros {
   Livro livro;
   struct lista_livros *prox;
 };
 typedef struct lista_livros BookList;
+
+
+void buscaISBN(BookList *l, char procura[]) {
+  BookList *p;
+  for (p = l; p != NULL; p = p->prox) {
+    if (strcmp(procura,p->livro.ISBN) == 0){
+      printf("\nTítulo: %s", p->livro.titulo);
+      printf("Autor: %s", p->livro.autor);
+      printf("Editora: %s", p->livro.editora);
+      printf("Ano de edição: %d", p->livro.ano_edicao);
+      printf("\nNúmero de exemplares %d", p->livro.num_exemplares);
+      printf("\nISBN: %s\n", p->livro.ISBN);
+      return;
+    }
+  }
+   printf("\nO ISBN digitado não está cadastrado\n");
+}
+
+void busca_editora(BookList *l, char editora[]) {
+  BookList *p;
+  for (p = l; p != NULL; p = p->prox) {
+    if (strcmp(editora,p->livro.editora) == 0){
+      printf("\nTítulo: %s", p->livro.titulo);
+      printf("Autor: %s", p->livro.autor);
+      printf("Editora: %s", p->livro.editora);
+      printf("Ano de edição: %d", p->livro.ano_edicao);
+      printf("\nNúmero de exemplares %d", p->livro.num_exemplares);
+      printf("\nISBN: %s\n", p->livro.ISBN);
+      return;
+    }else{
+     
+    }
+  }
+  
+}
+void busca_autor(BookList *l, char autor[]) {
+  BookList *p;
+  for (p = l; p != NULL; p = p->prox) {
+    if (strcmp(autor,p->livro.autor) == 0){
+      printf("\nTítulo: %s", p->livro.titulo);
+      printf("Autor: %s", p->livro.autor);
+      printf("Editora: %s", p->livro.editora);
+      printf("Ano de edição: %d", p->livro.ano_edicao);
+      printf("\nNúmero de exemplares %d", p->livro.num_exemplares);
+      printf("\nISBN: %s\n", p->livro.ISBN);
+      return;
+    }    
+  } 
+  printf("\nO autor digitado não está cadastrado\n");
+}
 
 BookList *inicializa(void) { return NULL; }
 
@@ -82,33 +106,32 @@ BookList *insere_ordenado(BookList *l, struct livro v) {
 Livro cadastro(BookList *listaliv) {
   Livro l;
   BookList *p;
-  printf("Insira os dados do livro que deseja cadastrar:\n");
-  printf("Título do livro: ");
-  scanf("%s", l.titulo);
+  printf("\nInsira os dados do livro que deseja cadastrar:\n");
+  printf("\nTítulo do livro: ");
+  getchar();
+  fgets(l.titulo,50,stdin);
   printf("Autor: ");
-  scanf("%s", l.autor);
+  fgets(l.autor,50,stdin);
   printf("Editora: ");
-  scanf("%s", l.editora);
+  fgets(l.editora,35,stdin);
   printf("Ano de edição: ");
   scanf("%d", &l.ano_edicao);
   printf("Número de exemplares: ");
   scanf("%d", &l.num_exemplares);
   printf("ISBN: ");
   scanf("%s", l.ISBN);
-  for (p = listaliv; p != NULL; p = p->prox) 
-  {
-    while (strcmp(l.ISBN, p->livro.ISBN) == 0)
-      {
-        printf("\nISBN já cadastrado, por favor, tente novamente!\n");
-        printf("ISBN: ");
-        scanf("%s", l.ISBN);
-        p = listaliv;
+  for (p = listaliv; p != NULL; p = p->prox) {
+    while (strcmp(l.ISBN, p->livro.ISBN) == 0) {
+      printf("\nISBN já cadastrado, por favor, tente novamente!\n");
+      printf("ISBN: ");
+      scanf("%s", l.ISBN);
+      p = listaliv;
     }
   }
 
   return l;
 }
-
+/*
 void imprime(BookList *livro) {
   BookList *p; // variavel para percorrer a lista
   for (p = livro; p != NULL; p = p->prox) {
@@ -119,71 +142,56 @@ void imprime(BookList *livro) {
     printf("Número de exemplares %d\n", p->livro.num_exemplares);
     printf("ISBN: %s\n", p->livro.ISBN);
   }
-}
-/*int buscabinaria(int t,int v,int isbn){
-  int inicio = 0;
-  int fim = t -1;
-  int meio;
-  while(inicio <= fim)
-  {
-    meio = (inicio + fim)/2;
-
-    if (isbn < v[meio])
-    {
-      fim = meio - 1
-    }else (n > v[meio]){
-      inicio = meio +1;
-    } else return meio;
-  }return -1;
-}
-*/
+}*/
 
 int main(void) {
-  Lista_ISBN *lis;
-  lis = incializa1();
   BookList *bl;
   bl = inicializa();
-  int opt1,opt2,opt3;
-    
-  for(; ;)
-  {
-      printf("Bem vindo a livraria Nexos!\n")  ;
-      printf("O que deseja?\n");
-      printf("1 - Cadastrar um livro | 2 - Procurar um livro | 3 - Sair do sistema\n");
-      scanf("%d",&opt1);
-      if(opt1 == 1)
-        {
-          Livro livro = cadastro(bl);
-          bl = insere_ordenado(bl, livro);
-        }
-      else if(opt1 == 2)
-        {
-          printf("Deseja procurar o livro desejado através de qual meio?\n");
-          printf("1 - Busca por ISBN | 2 - Busca por Editora | 3 - Busca por Autor\n");
-          scanf("%d",&opt2);
-          if(opt2 == 1)
-            {
-              
-            }
-        
-      }
-    
-    
-  }
-  //bl = insere_ordenado(bl, livro);
-  // printf("autor: %s\n", bl->livro.autor);
-  // printf("ISBN: %s\n", bl->livro.ISBN);
-  imprime(bl);
+  int opt1, opt2, opt3;
+  char busca_isbn[10];
+  char editora[35];
+  char autor[50];
 
-  // printf("%s",bl->livro.ISBN);
+  for (;;) {
+    printf("--------------------#-------------------\n");
+    printf("Bem vindo a livraria Nexos!\n");
+    printf("O que deseja?\n");
+    printf("\n1 - Cadastrar um livro | 2 - Procurar um livro | 3 - Sair do sistema\n");
+    scanf("%d", &opt1);
+    if (opt1 == 1) {
+      Livro livro = cadastro(bl);
+      bl = insere_ordenado(bl, livro);
+      printf("Livro cadastrado com sucesso!\n");
+      
+    } else if (opt1 == 2) {
+      printf("\nDeseja procurar o livro desejado através de qual meio?\n");
+      printf(
+          "\n1 - Busca por ISBN | 2 - Busca por Editora | 3 - Busca por Autor\n");
+      scanf("%d", &opt2);
+      if (opt2 == 1) {
+        printf("Qual o ISBN do livro que procura?\n");
+        scanf("%s",busca_isbn);
+        buscaISBN(bl, busca_isbn);
+      }
+      else if(opt2 == 2){
+        printf("Deseja ver os livro de qual editora?\n");
+        getchar();
+        fgets(editora,35,stdin);
+        busca_editora(bl,editora);
+      }
+      else if(opt2 == 3){
+        printf("Deseja buscar os livros de qual autor?\n");
+        getchar();
+        fgets(autor, 50,stdin);
+        busca_autor(bl, autor);
+      }
+
+    }else if (opt1 == 3) {
+      printf("\nSaindo do sistema...\n");
+      break; // encerra o loop infinito
+    }
+  }
 
   return 0;
 }
 
-// n sei se ta certo kkkkk
-//  int main(){
-//    int vet[]={1,2,3,7,4,5,8,9};
-//    int tam = sizeof(vet)/sizeof(int);
-//    printf("%d \n"buscabinaria(tam,vet,5));
-//    return 0;
-//  }
